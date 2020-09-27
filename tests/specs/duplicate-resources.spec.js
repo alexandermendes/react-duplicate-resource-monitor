@@ -86,13 +86,13 @@ describe('Duplicate resources', () => {
   });
 
   it('disconnects the PerformanceObserver on unmount', async () => {
-    const { rerender } = renderHook(() => useResourceMonitor());
+    const { unmount } = renderHook(() => useResourceMonitor());
 
     const performanceObserver = perfUtils.getMockPerformanceObserver();
 
     expect(performanceObserver.disconnect).not.toHaveBeenCalled();
 
-    rerender();
+    unmount();
 
     expect(performanceObserver.disconnect).toHaveBeenCalled();
   });
@@ -115,5 +115,37 @@ describe('Duplicate resources', () => {
     expect(console.error).toHaveBeenCalledWith(
       `Warning: A script resource was loaded multiple times: ${url}`,
     );
+  });
+
+  it('ignores query params by default', () => {
+    const urlOne = 'http://example.com/my-resource?timestamp=123';
+    const urlTwo = 'http://example.com/my-resource?timestamp=456';
+
+    perfUtils.addPerformanceResourceTimingEntry({ name: urlOne, initiatorType: 'script' });
+    perfUtils.addPerformanceResourceTimingEntry({ name: urlTwo, initiatorType: 'script' });
+
+    console.error = jest.fn();
+
+    renderHook(() => useResourceMonitor());
+
+    expect(console.error).toHaveBeenCalledWith(
+      'Warning: A script resource was loaded multiple times: http://example.com/my-resource',
+    );
+  });
+
+  it('does not ignore query params if option set', () => {
+    const urlOne = 'http://example.com/my-resource?timestamp=123';
+    const urlTwo = 'http://example.com/my-resource?timestamp=456';
+
+    perfUtils.addPerformanceResourceTimingEntry({ name: urlOne, initiatorType: 'script' });
+    perfUtils.addPerformanceResourceTimingEntry({ name: urlTwo, initiatorType: 'script' });
+
+    console.error = jest.fn();
+
+    renderHook(() => useResourceMonitor({
+      duplicateIgnoreQuery: false,
+    }));
+
+    expect(console.error).not.toHaveBeenCalled();
   });
 });

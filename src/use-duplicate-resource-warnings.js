@@ -6,22 +6,26 @@ import { printWarning } from './print';
  */
 export const useDuplicateResourceWarnings = ({
   duplicateTypes = ['script', 'link', 'css'],
+  duplicateIgnoreQuery = true,
 } = {}) => {
   useEffect(() => {
     const resources = [];
     const reportedResources = [];
 
+    /**
+     * Check for duplicate resources and print a warning if any found.
+     */
     const checkForDuplicates = (newEntries) => {
       resources.push(...newEntries);
 
-      const trackedResources = resources
-        .filter(({ initiatorType }) => duplicateTypes.includes(initiatorType));
-
-      const resourcesByUrl = trackedResources
+      const resourcesByUrl = resources
+        .filter(({ initiatorType }) => duplicateTypes.includes(initiatorType))
         .reduce((acc, entry) => {
           const url = new URL(entry.name);
 
-          url.search = '';
+          if (duplicateIgnoreQuery) {
+            url.search = '';
+          }
 
           const { href } = url;
 
@@ -37,18 +41,20 @@ export const useDuplicateResourceWarnings = ({
       Object
         .entries(resourcesByUrl)
         .forEach(([url, entries]) => {
-          if (entries.length > 1 && !reportedResources.includes(url)) {
-            printWarning(`A ${entries[0].initiatorType} resource was loaded multiple times: ${url}`);
-
-            reportedResources.push(url);
+          if (entries.length < 2 || reportedResources.includes(url)) {
+            return;
           }
+
+          printWarning(`A ${entries[0].initiatorType} resource was loaded multiple times: ${url}`);
+
+          reportedResources.push(url);
         });
     };
 
     // Check resources already loaded
     checkForDuplicates(performance.getEntriesByType('resource'));
 
-    // Check any resources subsequently added
+    // Check any resources subsequently loaded
     const observer = new PerformanceObserver((list) => {
       checkForDuplicates(list.getEntries());
     });
@@ -58,7 +64,7 @@ export const useDuplicateResourceWarnings = ({
     return () => {
       observer.disconnect();
     };
-  });
+  }, []);
 
   return true;
 };

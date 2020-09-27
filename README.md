@@ -38,6 +38,12 @@ An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/P
 
 **Default:** `['script', 'link', 'css']`;
 
+### `duplicateIgnoreQuery`
+
+Ignore any query params when checking for duplicate resources.
+
+**Default:** `true`;
+
 ## Build setup
 
 ```bash
