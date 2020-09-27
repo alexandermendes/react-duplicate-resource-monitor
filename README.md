@@ -3,13 +3,9 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![npm version](https://badge.fury.io/js/react-resource-monitor.svg)](https://badge.fury.io/js/react-resource-monitor)
 
-During development it may be useful to draw attention to issues that may affect
-performance when the application is deployed.
-
-This package logs a warning when one of the following happens:
-
-- A dupliate resource is loaded (e.g. as the result of React re-renders)
-- The TTFB is above a defined limit
+When using head management libraries, such as [react-helmet](https://github.com/nfl/react-helmet),
+it is possible for React hydration and re-renders to cause resources to be loaded
+multiple times. This package logs a warning if that happens.
 
 ## Installation
 
@@ -24,21 +20,17 @@ Add the following hook to start monitoring resources:
 ```jsx
 import { useResourceMonitor } from 'react-resource-monitor';
 
-useResourceMonitor({
-  ttfbLimit: 200,
-  duplicateTypes: ['script', 'link', 'css'],
-});
+useResourceMonitor();
 ```
 
 ## Settings
 
 The `useResourceMonitor()` hook accepts an object with the following settings:
 
-| Option               | Description                                                                                                                                      | Default     |
-|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-| ttfbLimit            | The limit in milliseconds for the time to first byte.                                                                                            | `null`      |
-| duplicateTypes       | An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming/initiatorType) to check for duplicates. | `[]`        |
-| duplicateIgnoreQuery | Ignore any query params when checking for duplicate resources.                                                                                   | `true`      |
+| Option         | Description                                                                                                                                      | Default                     |
+|----------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
+| initiatorTypes | An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming/initiatorType) to check for duplicates. | `['script', 'link', 'css']` |
+| ignoreQuery    | Ignore any query params when checking for duplicate resources.                                                                                   | `true`                      |
 
 ## Browser Support
 

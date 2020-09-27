@@ -27,7 +27,31 @@ describe('Duplicate resources', () => {
     perfUtils.reset();
   });
 
-  it.each(resourceTypes)('does not print a warning by default if a duplicate %s resource is detected', async (initiatorType) => {
+  it.each([
+    'script',
+    'link',
+    'css',
+  ])('prints a warning if a duplicate %s resource is detected', async (initiatorType) => {
+    const url = 'http://example.com/my-resource';
+
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
+
+    console.error = jest.fn();
+
+    renderHook(() => useResourceMonitor());
+
+    expect(console.error).toHaveBeenCalledWith(
+      `Warning: A ${initiatorType} resource was loaded multiple times: ${url}`,
+    );
+  });
+
+  it.each([
+    'iframe',
+    'img',
+    'xmlhttprequest',
+    'use',
+  ])('does not prints a warning for a duplicate %s resource by default', async (initiatorType) => {
     const url = 'http://example.com/my-resource';
 
     perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
@@ -40,7 +64,12 @@ describe('Duplicate resources', () => {
     expect(console.error).not.toHaveBeenCalled();
   });
 
-  it.each(resourceTypes)('prints a warning for a duplicate %s resource if given as a checked type', async (initiatorType) => {
+  it.each([
+    'iframe',
+    'img',
+    'xmlhttprequest',
+    'use',
+  ])('prints a warning for a duplicate %s resource if given as a checked type', async (initiatorType) => {
     const url = 'http://example.com/my-resource';
 
     perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
@@ -49,7 +78,7 @@ describe('Duplicate resources', () => {
     console.error = jest.fn();
 
     renderHook(() => useResourceMonitor({
-      duplicateTypes: [initiatorType],
+      initiatorTypes: [initiatorType],
     }));
 
     expect(console.error).toHaveBeenCalledWith(
@@ -86,7 +115,7 @@ describe('Duplicate resources', () => {
 
     console.error = jest.fn();
 
-    renderHook(() => useResourceMonitor({ duplicateTypes: ['script'] }));
+    renderHook(() => useResourceMonitor({ initiatorTypes: ['script'] }));
 
     expect(console.error).not.toHaveBeenCalled();
 
@@ -109,7 +138,7 @@ describe('Duplicate resources', () => {
     console.error = jest.fn();
 
     renderHook(() => useResourceMonitor({
-      duplicateTypes: ['script'],
+      initiatorTypes: ['script'],
     }));
 
     expect(console.error).toHaveBeenCalledWith(
@@ -127,8 +156,8 @@ describe('Duplicate resources', () => {
     console.error = jest.fn();
 
     renderHook(() => useResourceMonitor({
-      duplicateTypes: ['script'],
-      duplicateIgnoreQuery: false,
+      initiatorTypes: ['script'],
+      ignoreQuery: false,
     }));
 
     expect(console.error).not.toHaveBeenCalled();
@@ -144,7 +173,7 @@ describe('Duplicate resources', () => {
     console.error = jest.fn();
 
     renderHook(() => useResourceMonitor({
-      duplicateTypes: [initiatorType],
+      initiatorTypes: [initiatorType],
     }));
 
     expect(console.error).toHaveBeenCalledTimes(1);
