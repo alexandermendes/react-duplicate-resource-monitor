@@ -7,14 +7,6 @@ result of React re-renders.
 
 ## Installation
 
-Install with npm:
-
-```
-npm install react-resource-monitor
-```
-
-or yarn:
-
 ```
 yarn add react-resource-monitor
 ```
@@ -26,24 +18,21 @@ Add the following hook to start monitoring resources:
 ```jsx
 import { useResourceMonitor } from 'react-resource-monitor';
 
-useResourceMonitor();
+useResourceMonitor({
+  ttfbLimit: 200,
+  duplicateTypes: ['script', 'link', 'css'],
+});
 ```
 
 ## Settings
 
 The `useResourceMonitor()` hook accepts an object with the following settings:
 
-#### `duplicateTypes`
-
-An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming/initiatorType) to check for duplicates. Set this to an empty array to disable the check.
-
-**Default:** `['script', 'link', 'css']`
-
-#### `duplicateIgnoreQuery`
-
-Ignore any query params when checking for duplicate resources.
-
-**Default:** `true`
+| Option               | Description                                                                                                                                      | Default     |
+|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| ttfbLimit            | The limit in milliseconds for the time to first byte.                                                                                            | `null`      |
+| duplicateTypes       | An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming/initiatorType) to check for duplicates. | `[]`        |
+| duplicateIgnoreQuery | Ignore any query params when checking for duplicate resources.                                                                                   | `true`      |
 
 ## Build setup
 

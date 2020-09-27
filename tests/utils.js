@@ -92,8 +92,8 @@ export const createPerformanceApi = () => {
   global.PerformanceObserver = jest.fn().mockImplementation(() => mockPerformanceObserver);
 
   return {
-    addPerformanceResourceTimingEntry: (opts) => {
-      entries.push(Object.freeze(new PerformanceResourceTiming(opts)));
+    addEntry: (opts) => {
+      entries.push(Object.freeze(opts));
     },
     clearCustomEntries: () => {
       entries = [];

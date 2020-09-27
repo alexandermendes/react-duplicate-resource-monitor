@@ -5,8 +5,8 @@ import { printWarning } from './print';
  * Check for duplicate resources being loaded.
  */
 export const useDuplicateResourceMonitor = ({
-  duplicateTypes = ['script', 'link', 'css'],
-  duplicateIgnoreQuery = true,
+  types = [],
+  ignoreQuery = true,
 } = {}) => {
   useEffect(() => {
     const resources = [];
@@ -19,11 +19,11 @@ export const useDuplicateResourceMonitor = ({
       resources.push(...newEntries);
 
       const resourcesByUrl = resources
-        .filter(({ initiatorType }) => duplicateTypes.includes(initiatorType))
+        .filter(({ initiatorType }) => types.includes(initiatorType))
         .reduce((acc, entry) => {
           const url = new URL(entry.name);
 
-          if (duplicateIgnoreQuery) {
+          if (ignoreQuery) {
             url.search = '';
           }
 
@@ -64,7 +64,7 @@ export const useDuplicateResourceMonitor = ({
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [types, ignoreQuery]);
 
   return true;
 };

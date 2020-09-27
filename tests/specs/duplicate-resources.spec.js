@@ -5,6 +5,15 @@ import { createPerformanceApi } from '../utils';
 
 const originalConsoleError = console.error;
 
+const resourceTypes = [
+  'script',
+  'css',
+  'link',
+  'img',
+  'xmlhttprequest',
+  'iframe',
+];
+
 describe('Duplicate resources', () => {
   let perfUtils;
 
@@ -18,34 +27,11 @@ describe('Duplicate resources', () => {
     perfUtils.clearCustomEntries();
   });
 
-  it.each([
-    'script',
-    'css',
-    'link',
-  ])('prints a warning if a duplicate %s resource is detected', async (initiatorType) => {
+  it.each(resourceTypes)('does not print a warning by default if a duplicate %s resource is detected', async (initiatorType) => {
     const url = 'http://example.com/my-resource';
 
-    perfUtils.addPerformanceResourceTimingEntry({ name: url, initiatorType });
-    perfUtils.addPerformanceResourceTimingEntry({ name: url, initiatorType });
-
-    console.error = jest.fn();
-
-    renderHook(() => useResourceMonitor());
-
-    expect(console.error).toHaveBeenCalledWith(
-      `Warning: A ${initiatorType} resource was loaded multiple times: ${url}`,
-    );
-  });
-
-  it.each([
-    'img',
-    'xmlhttprequest',
-    'iframe',
-  ])('does not print a warning if a duplicate %s resource is detected', async (initiatorType) => {
-    const url = 'http://example.com/my-resource';
-
-    perfUtils.addPerformanceResourceTimingEntry({ name: url, initiatorType });
-    perfUtils.addPerformanceResourceTimingEntry({ name: url, initiatorType });
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
 
     console.error = jest.fn();
 
@@ -54,15 +40,11 @@ describe('Duplicate resources', () => {
     expect(console.error).not.toHaveBeenCalled();
   });
 
-  it.each([
-    'img',
-    'xmlhttprequest',
-    'iframe',
-  ])('prints a warning for a duplicate %s resource if defaults overridden', async (initiatorType) => {
+  it.each(resourceTypes)('prints a warning for a duplicate %s resource if given as a checked type', async (initiatorType) => {
     const url = 'http://example.com/my-resource';
 
-    perfUtils.addPerformanceResourceTimingEntry({ name: url, initiatorType });
-    perfUtils.addPerformanceResourceTimingEntry({ name: url, initiatorType });
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
 
     console.error = jest.fn();
 
@@ -100,15 +82,15 @@ describe('Duplicate resources', () => {
   it('prints a warning for a duplicate resources detected after the initial run', () => {
     const url = 'http://example.com/my-resource';
 
-    perfUtils.addPerformanceResourceTimingEntry({ name: url, initiatorType: 'script' });
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType: 'script' });
 
     console.error = jest.fn();
 
-    renderHook(() => useResourceMonitor());
+    renderHook(() => useResourceMonitor({ duplicateTypes: ['script'] }));
 
     expect(console.error).not.toHaveBeenCalled();
 
-    perfUtils.addPerformanceResourceTimingEntry({ name: url, initiatorType: 'script' });
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType: 'script' });
 
     PerformanceObserver.mock.calls[0][0](performance);
 
@@ -121,12 +103,14 @@ describe('Duplicate resources', () => {
     const urlOne = 'http://example.com/my-resource?timestamp=123';
     const urlTwo = 'http://example.com/my-resource?timestamp=456';
 
-    perfUtils.addPerformanceResourceTimingEntry({ name: urlOne, initiatorType: 'script' });
-    perfUtils.addPerformanceResourceTimingEntry({ name: urlTwo, initiatorType: 'script' });
+    perfUtils.addEntry({ entryType: 'resource', name: urlOne, initiatorType: 'script' });
+    perfUtils.addEntry({ entryType: 'resource', name: urlTwo, initiatorType: 'script' });
 
     console.error = jest.fn();
 
-    renderHook(() => useResourceMonitor());
+    renderHook(() => useResourceMonitor({
+      duplicateTypes: ['script'],
+    }));
 
     expect(console.error).toHaveBeenCalledWith(
       'Warning: A script resource was loaded multiple times: http://example.com/my-resource',
@@ -137,12 +121,13 @@ describe('Duplicate resources', () => {
     const urlOne = 'http://example.com/my-resource?timestamp=123';
     const urlTwo = 'http://example.com/my-resource?timestamp=456';
 
-    perfUtils.addPerformanceResourceTimingEntry({ name: urlOne, initiatorType: 'script' });
-    perfUtils.addPerformanceResourceTimingEntry({ name: urlTwo, initiatorType: 'script' });
+    perfUtils.addEntry({ entryType: 'resource', name: urlOne, initiatorType: 'script' });
+    perfUtils.addEntry({ entryType: 'resource', name: urlTwo, initiatorType: 'script' });
 
     console.error = jest.fn();
 
     renderHook(() => useResourceMonitor({
+      duplicateTypes: ['script'],
       duplicateIgnoreQuery: false,
     }));
 
