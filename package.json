@@ -1,6 +1,6 @@
 {
   "name": "react-resource-monitor",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "Utilities for monitoring web resources in React applications.",
   "main": "dist/index.js",
   "scripts": {
