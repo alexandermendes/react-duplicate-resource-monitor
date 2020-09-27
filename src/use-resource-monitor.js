@@ -10,12 +10,17 @@ const noop = () => {};
 export const useResourceMonitor = typeof window === 'undefined' ? noop : ({
   initiatorTypes = ['script', 'link', 'css'],
   ignoreQuery = true,
+  disable,
 } = {}) => {
   if (typeof window.performance === 'undefined') {
     return;
   }
 
   if (typeof PerformanceObserver === 'undefined') {
+    return;
+  }
+
+  if (disable) {
     return;
   }
 

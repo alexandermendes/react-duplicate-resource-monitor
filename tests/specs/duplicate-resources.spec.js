@@ -5,15 +5,6 @@ import { setupEnvironment } from '../utils';
 
 const originalConsoleError = console.error;
 
-const resourceTypes = [
-  'script',
-  'css',
-  'link',
-  'img',
-  'xmlhttprequest',
-  'iframe',
-];
-
 describe('Duplicate resources', () => {
   let perfUtils;
 
@@ -184,5 +175,20 @@ describe('Duplicate resources', () => {
     PerformanceObserver.mock.calls[0][0](performance);
 
     expect(console.error).toHaveBeenCalledTimes(1);
+  });
+
+  it('can be disabled', () => {
+    const url = 'http://example.com/my-resource';
+
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType: 'script' });
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType: 'script' });
+
+    console.error = jest.fn();
+
+    renderHook(() => useResourceMonitor({
+      disable: true,
+    }));
+
+    expect(console.error).not.toHaveBeenCalled();
   });
 });

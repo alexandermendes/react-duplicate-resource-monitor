@@ -31,6 +31,7 @@ The `useResourceMonitor()` hook accepts an object with the following settings:
 |----------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
 | initiatorTypes | An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming/initiatorType) to check for duplicates. | `['script', 'link', 'css']` |
 | ignoreQuery    | Ignore any query params when checking for duplicate resources.                                                                                   | `true`                      |
+| disable        | Disable the warnings (e.g. if `process.env.NODE_ENV === 'production'`).                                                                          | `false`                     |
 
 ## Browser Support
 
