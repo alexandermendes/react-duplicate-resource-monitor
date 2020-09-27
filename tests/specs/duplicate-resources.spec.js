@@ -133,4 +133,27 @@ describe('Duplicate resources', () => {
 
     expect(console.error).not.toHaveBeenCalled();
   });
+
+  it('does not report resources twice', () => {
+    const url = 'http://example.com/my-resource';
+    const initiatorType = 'script';
+
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
+
+    console.error = jest.fn();
+
+    renderHook(() => useResourceMonitor({
+      duplicateTypes: [initiatorType],
+    }));
+
+    expect(console.error).toHaveBeenCalledTimes(1);
+    expect(console.error).toHaveBeenCalledWith(expect.stringMatching(/Warning:.*/));
+
+    perfUtils.addEntry({ entryType: 'resource', name: url, initiatorType });
+
+    PerformanceObserver.mock.calls[0][0](performance);
+
+    expect(console.error).toHaveBeenCalledTimes(1);
+  });
 });
