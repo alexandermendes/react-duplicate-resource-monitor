@@ -34,6 +34,10 @@ The `useResourceMonitor()` hook accepts an object with the following settings:
 | duplicateTypes       | An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming/initiatorType) to check for duplicates. | `[]`        |
 | duplicateIgnoreQuery | Ignore any query params when checking for duplicate resources.                                                                                   | `true`      |
 
+## Browser Support
+
+This package will not work on IE unless you [polyfill](https://github.com/fastly/performance-observer-polyfill) `PerformanceObserver`.
+
 ## Build setup
 
 ```bash

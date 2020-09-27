@@ -6,6 +6,14 @@ export const useResourceMonitor = ({
   duplicateTypes,
   duplicateIgnoreQuery,
 } = {}) => {
+  if (typeof window.performance === 'undefined') {
+    return;
+  }
+
+  if (typeof PerformanceObserver === 'undefined') {
+    return;
+  }
+
   useDuplicateResourceMonitor({
     types: duplicateTypes,
     ignoreQuery: duplicateIgnoreQuery,
