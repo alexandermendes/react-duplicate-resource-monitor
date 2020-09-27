@@ -8,7 +8,7 @@ performance when the application is deployed.
 
 This package logs a warning when one of the following happens:
 
-- A dupliate resource is loaded (e.g. as the result of React re-renders).
+- A dupliate resource is loaded (e.g. as the result of React re-renders)
 - The TTFB is above a defined limit
 
 ## Installation
@@ -42,7 +42,7 @@ The `useResourceMonitor()` hook accepts an object with the following settings:
 
 ## Browser Support
 
-This package will not work on IE unless you [polyfill](https://github.com/fastly/performance-observer-polyfill) `PerformanceObserver`.
+This package will not work for IE unless you [polyfill `PerformanceObserver`](https://github.com/fastly/performance-observer-polyfill).
 
 ## Build setup
 
