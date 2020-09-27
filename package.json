@@ -10,11 +10,11 @@
     "prebuild": "rimraf dist",
     "prepublishOnly": "yarn install && yarn run build"
   },
-  "author": "Immediate Media",
+  "author": "Alex Mendes",
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.immediate.co.uk/alexandermendes/react-resource-monitor"
+    "url": "https://github.com/alexandermendes/react-resource-monitor"
   },
   "husky": {
     "hooks": {
