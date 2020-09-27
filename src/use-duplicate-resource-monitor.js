@@ -4,7 +4,7 @@ import { printWarning } from './print';
 /**
  * Check for duplicate resources being loaded.
  */
-export const useDuplicateResourceWarnings = ({
+export const useDuplicateResourceMonitor = ({
   duplicateTypes = ['script', 'link', 'css'],
   duplicateIgnoreQuery = true,
 } = {}) => {

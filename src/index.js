@@ -1,2 +1,2 @@
 export { useResourceMonitor } from './use-resource-monitor';
-export { useDuplicateResourceWarnings } from './use-duplicate-resource-warnings';
+export { useDuplicateResourceMonitor } from './use-duplicate-resource-monitor';
