@@ -1,6 +1,6 @@
 {
   "name": "react-resource-monitor",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Utilities for monitoring web resources in React applications.",
   "main": "dist/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "prepublishOnly": "yarn install && yarn run build"
   },
   "author": "Alex Mendes",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/alexandermendes/react-resource-monitor"
