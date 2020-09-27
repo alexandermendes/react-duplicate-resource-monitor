@@ -1,7 +1,9 @@
 import { useDuplicateResourceMonitor } from './use-duplicate-resource-monitor';
 import { useTTFBMonitor } from './use-ttfb-monitor';
 
-export const useResourceMonitor = ({
+const noop = () => {};
+
+export const useResourceMonitor = typeof window === 'undefined' ? noop : ({
   ttfbLimit,
   duplicateTypes,
   duplicateIgnoreQuery,
