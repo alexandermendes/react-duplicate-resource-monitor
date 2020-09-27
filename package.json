@@ -16,9 +16,6 @@
     "type": "git",
     "url": "https://github.immediate.co.uk/alexandermendes/react-resource-monitor"
   },
-  "engines": {
-    "node": ">=10.15.0"
-  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"

@@ -32,17 +32,17 @@ useResourceMonitor();
 
 The `useResourceMonitor()` hook accepts an object with the following settings:
 
-### `duplicateTypes`
+#### `duplicateTypes`
 
-An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming/initiatorType)s to check for duplicates. Set this to an empty array to disable the check.
+An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming/initiatorType) to check for duplicates. Set this to an empty array to disable the check.
 
-**Default:** `['script', 'link', 'css']`;
+**Default:** `['script', 'link', 'css']`
 
-### `duplicateIgnoreQuery`
+#### `duplicateIgnoreQuery`
 
 Ignore any query params when checking for duplicate resources.
 
-**Default:** `true`;
+**Default:** `true`
 
 ## Build setup
 
