@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 
 import { useResourceMonitor } from '../../src';
-import { createPerformanceApi } from '../utils';
+import { setupEnvironment } from '../utils';
 
 const originalConsoleError = console.error;
 
@@ -9,13 +9,13 @@ describe('TTFB', () => {
   let perfUtils;
 
   beforeEach(() => {
-    perfUtils = createPerformanceApi();
+    perfUtils = setupEnvironment();
   });
 
   afterEach(() => {
     console.error = originalConsoleError;
 
-    perfUtils.clearCustomEntries();
+    perfUtils.reset();
   });
 
   it('logs a warning if the TTFB is above the limit', () => {

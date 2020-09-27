@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 
 import { useResourceMonitor } from '../../src';
-import { createPerformanceApi } from '../utils';
+import { setupEnvironment } from '../utils';
 
 const originalConsoleError = console.error;
 
@@ -18,13 +18,13 @@ describe('Duplicate resources', () => {
   let perfUtils;
 
   beforeEach(() => {
-    perfUtils = createPerformanceApi();
+    perfUtils = setupEnvironment();
   });
 
   afterEach(() => {
     console.error = originalConsoleError;
 
-    perfUtils.clearCustomEntries();
+    perfUtils.reset();
   });
 
   it.each(resourceTypes)('does not print a warning by default if a duplicate %s resource is detected', async (initiatorType) => {
