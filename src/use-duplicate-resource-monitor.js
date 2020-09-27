@@ -4,9 +4,9 @@ import { printWarning } from './print';
 /**
  * Check for duplicate resources being loaded.
  */
-export const useDuplicateResourceWarnings = ({
-  duplicateTypes = ['script', 'link', 'css'],
-  duplicateIgnoreQuery = true,
+export const useDuplicateResourceMonitor = ({
+  initiatorTypes = ['script', 'link', 'css'],
+  ignoreQuery = true,
 } = {}) => {
   useEffect(() => {
     const resources = [];
@@ -19,11 +19,11 @@ export const useDuplicateResourceWarnings = ({
       resources.push(...newEntries);
 
       const resourcesByUrl = resources
-        .filter(({ initiatorType }) => duplicateTypes.includes(initiatorType))
+        .filter(({ initiatorType }) => initiatorTypes.includes(initiatorType))
         .reduce((acc, entry) => {
           const url = new URL(entry.name);
 
-          if (duplicateIgnoreQuery) {
+          if (ignoreQuery) {
             url.search = '';
           }
 
@@ -54,7 +54,7 @@ export const useDuplicateResourceWarnings = ({
     // Check resources already loaded
     checkForDuplicates(performance.getEntriesByType('resource'));
 
-    // Check any resources subsequently loaded
+    // Check resources subsequently loaded
     const observer = new PerformanceObserver((list) => {
       checkForDuplicates(list.getEntries());
     });

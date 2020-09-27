@@ -1,21 +1,14 @@
-# React Resource Monitor
+# React Duplicate Resource Monitor
 
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-Utilities for monitoring web resources in React applications.
+Logs a warning if a resource was loaded more than once, for example, as the
+result of React re-renders.
 
 ## Installation
 
-Install with npm:
-
 ```
-npm install react-resource-monitor
-```
-
-or yarn:
-
-```
-yarn add react-resource-monitor
+yarn add react-duplicate-resource-monitor
 ```
 
 ## Usage
@@ -23,22 +16,22 @@ yarn add react-resource-monitor
 Add the following hook to start monitoring resources:
 
 ```jsx
-import { useResourceMonitor } from 'react-resource-monitor';
+import { useDuplicateResourceMonitor } from 'react-duplicate-resource-monitor';
 
-useResourceMonitor();
+useDuplicateResourceMonitor();
 ```
 
 ## Settings
 
-The `useResourceMonitor()` hook accepts an object with the following settings:
+The `useDuplicateResourceMonitor()` hook accepts an object with the following settings:
 
-#### `duplicateTypes`
+#### `initiatorTypes`
 
 An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming/initiatorType) to check for duplicates. Set this to an empty array to disable the check.
 
 **Default:** `['script', 'link', 'css']`
 
-#### `duplicateIgnoreQuery`
+#### `ignoreQuery`
 
 Ignore any query params when checking for duplicate resources.
 

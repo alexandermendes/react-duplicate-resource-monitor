@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 
-import { useResourceMonitor } from '../../src';
+import { useDuplicateResourceMonitor } from '../../src';
 import { createPerformanceApi } from '../utils';
 
 const originalConsoleError = console.error;
@@ -30,7 +30,7 @@ describe('Duplicate resources', () => {
 
     console.error = jest.fn();
 
-    renderHook(() => useResourceMonitor());
+    renderHook(() => useDuplicateResourceMonitor());
 
     expect(console.error).toHaveBeenCalledWith(
       `Warning: A ${initiatorType} resource was loaded multiple times: ${url}`,
@@ -49,7 +49,7 @@ describe('Duplicate resources', () => {
 
     console.error = jest.fn();
 
-    renderHook(() => useResourceMonitor());
+    renderHook(() => useDuplicateResourceMonitor());
 
     expect(console.error).not.toHaveBeenCalled();
   });
@@ -66,8 +66,8 @@ describe('Duplicate resources', () => {
 
     console.error = jest.fn();
 
-    renderHook(() => useResourceMonitor({
-      duplicateTypes: [initiatorType],
+    renderHook(() => useDuplicateResourceMonitor({
+      initiatorTypes: [initiatorType],
     }));
 
     expect(console.error).toHaveBeenCalledWith(
@@ -76,7 +76,7 @@ describe('Duplicate resources', () => {
   });
 
   it('attaches a PerformanceObserver', async () => {
-    renderHook(() => useResourceMonitor());
+    renderHook(() => useDuplicateResourceMonitor());
 
     const performanceObserver = perfUtils.getMockPerformanceObserver();
 
@@ -86,7 +86,7 @@ describe('Duplicate resources', () => {
   });
 
   it('disconnects the PerformanceObserver on unmount', async () => {
-    const { unmount } = renderHook(() => useResourceMonitor());
+    const { unmount } = renderHook(() => useDuplicateResourceMonitor());
 
     const performanceObserver = perfUtils.getMockPerformanceObserver();
 
@@ -104,7 +104,7 @@ describe('Duplicate resources', () => {
 
     console.error = jest.fn();
 
-    renderHook(() => useResourceMonitor());
+    renderHook(() => useDuplicateResourceMonitor());
 
     expect(console.error).not.toHaveBeenCalled();
 
@@ -126,7 +126,7 @@ describe('Duplicate resources', () => {
 
     console.error = jest.fn();
 
-    renderHook(() => useResourceMonitor());
+    renderHook(() => useDuplicateResourceMonitor());
 
     expect(console.error).toHaveBeenCalledWith(
       'Warning: A script resource was loaded multiple times: http://example.com/my-resource',
@@ -142,8 +142,8 @@ describe('Duplicate resources', () => {
 
     console.error = jest.fn();
 
-    renderHook(() => useResourceMonitor({
-      duplicateIgnoreQuery: false,
+    renderHook(() => useDuplicateResourceMonitor({
+      ignoreQuery: false,
     }));
 
     expect(console.error).not.toHaveBeenCalled();
