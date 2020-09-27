@@ -1,5 +1,5 @@
 import { useDuplicateResourceWarnings } from './use-duplicate-resource-warnings';
 
-export const useResourceMonitor = () => {
-  useDuplicateResourceWarnings();
+export const useResourceMonitor = (opts) => {
+  useDuplicateResourceWarnings(opts);
 };

@@ -4,9 +4,10 @@ import { printWarning } from './print';
 /**
  * Check for duplicate resources being loaded.
  */
-export const useDuplicateResourceWarnings = () => {
+export const useDuplicateResourceWarnings = ({
+  duplicateTypes = ['script', 'link', 'css'],
+} = {}) => {
   useEffect(() => {
-    const initiatorTypes = ['script', 'css'];
     const resources = [];
     const reportedResources = [];
 
@@ -14,7 +15,7 @@ export const useDuplicateResourceWarnings = () => {
       resources.push(...newEntries);
 
       const trackedResources = resources
-        .filter(({ initiatorType }) => initiatorTypes.includes(initiatorType));
+        .filter(({ initiatorType }) => duplicateTypes.includes(initiatorType));
 
       const resourcesByUrl = trackedResources
         .reduce((acc, entry) => {

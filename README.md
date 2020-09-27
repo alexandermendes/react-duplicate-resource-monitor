@@ -20,11 +20,23 @@ yarn add react-resource-monitor
 
 ## Usage
 
+Add the following hook to start monitoring resources:
+
 ```jsx
 import { useResourceMonitor } from 'react-resource-monitor';
 
 useResourceMonitor();
 ```
+
+## Settings
+
+The `useResourceMonitor()` hook accepts an object with the following settings:
+
+### `duplicateTypes`
+
+An array of [`initiatorType`](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming/initiatorType)s to check for duplicates. Set this to an empty array to disable the check.
+
+**Default:** `['script', 'link', 'css']`;
 
 ## Build setup
 

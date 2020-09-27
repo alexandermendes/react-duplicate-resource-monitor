@@ -57,7 +57,7 @@ class PerformanceResourceTiming {
  * Modify the Performance API, adding functionality so we can push entries.
  */
 export const createPerformanceApi = () => {
-  const entries = [];
+  let entries = [];
 
   const originalGetEntries = performance.getEntries;
   const originalGetEntriesByType = performance.getEntriesByType;
@@ -84,9 +84,20 @@ export const createPerformanceApi = () => {
     ],
   });
 
+  const mockPerformanceObserver = {
+    observe: jest.fn(),
+    disconnect: jest.fn(),
+  };
+
+  global.PerformanceObserver = jest.fn().mockImplementation(() => mockPerformanceObserver);
+
   return {
     addPerformanceResourceTimingEntry: (opts) => {
       entries.push(Object.freeze(new PerformanceResourceTiming(opts)));
     },
+    clearCustomEntries: () => {
+      entries = [];
+    },
+    getMockPerformanceObserver: () => mockPerformanceObserver,
   };
 };
