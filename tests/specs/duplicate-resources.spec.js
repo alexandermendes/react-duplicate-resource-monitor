@@ -197,7 +197,7 @@ describe('Duplicate resources', () => {
 
     performanceObserver.observe = () => {
       throw new Error();
-    }
+    };
 
     console.error = jest.fn();
 
