@@ -191,4 +191,18 @@ describe('Duplicate resources', () => {
 
     expect(console.error).not.toHaveBeenCalled();
   });
+
+  it('does not throw if observer failed', () => {
+    const performanceObserver = perfUtils.getMockPerformanceObserver();
+
+    performanceObserver.observe = () => {
+      throw new Error();
+    }
+
+    console.error = jest.fn();
+
+    renderHook(() => useResourceMonitor());
+
+    expect(() => renderHook(() => useResourceMonitor())).not.toThrow();
+  });
 });

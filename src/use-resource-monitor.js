@@ -75,7 +75,13 @@ export const useResourceMonitor = typeof window === 'undefined' ? noop : ({
       checkForDuplicates(list.getEntries());
     });
 
-    observer.observe({ entryTypes: ['resource'] });
+    try {
+      observer.observe({ entryTypes: ['resource'] });
+    } catch (err) {
+      // Contiue silently if `observe()` throws an error for any reason. There
+      // seems for be a Webkit bug that throws for some browsers with the above
+      // entryTypes (similar to https://phabricator.wikimedia.org/T217210)
+    }
 
     return () => {
       observer.disconnect();
